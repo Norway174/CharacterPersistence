@@ -77,16 +77,13 @@ function CHARACTER_PERSISTENCE.LoadCharacter( ply, fileName )
     local CharTable = CHARACTER_PERSISTENCE.GetCharacter( ply, foldername, fileName )
     if not istable(CharTable) then return false end
 
-    --print("Loaded character data from '" .. CHARACTER_PERSISTENCE.Config.Directory .. foldername .. "/" .. fileName .. ".json'")
-    --ply:PrintMessage( HUD_PRINTCONSOLE, "[HALOARMORY] Character loaded from the server." )
-    ply:SendLua( 'CHARACTER_PERSISTENCE.MsgC("Character loaded from the server.")' )
 
     // Call a hook to allow other addons to load their own data from the character table
     --hook.Call( "HALOARMORY.LoadCharacter", nil, ply, CharTable )
 
     for ModuleName, ModuleTable in SortedPairsByMemberValue(CHARACTER_PERSISTENCE.Modules, "Order" ) do
         
-        CharTable[ModuleName] = CharTable[ModuleName] or {}
+        if not CharTable[ModuleName] then CharTable[ModuleName] = {} end
 
         local succ, err = pcall(ModuleTable.Load, ply, CharTable[ModuleName] or {})
 
@@ -96,9 +93,11 @@ function CHARACTER_PERSISTENCE.LoadCharacter( ply, fileName )
             return false
         end
 
-        CharTable[ModuleName] = err
-
     end
+
+    --print("Loaded character data from '" .. CHARACTER_PERSISTENCE.Config.Directory .. foldername .. "/" .. fileName .. ".json'")
+    --ply:PrintMessage( HUD_PRINTCONSOLE, "[HALOARMORY] Character loaded from the server." )
+
 
     // Print Table
     --PrintTable(CharTable)
@@ -124,14 +123,15 @@ hook.Add("SetupMove", "CHARACTER_PERSISTENCE.SVLOAD", function(ply, _, cmd)
         timer.Simple(0.4, function()
             if CHARACTER_PERSISTENCE.LoadCharacter( ply ) then
                 CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE LOADED FOR " .. ply:Nick() .. ".")
+                ply:SendLua( 'CHARACTER_PERSISTENCE.MsgC("Character loaded from the server.")' )
             else
                 // If not, open the character creator
-                if EnableCharacterCreator:GetBool() then
-                    CHARACTER_PERSISTENCE.OpenCreator( ply )
-                    CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE NOT FOUND FOR " .. ply:Nick() .. ". OPENED CREATOR.")
-                else 
-                    CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE NOT FOUND FOR " .. ply:Nick() .. ". CREATOR DISABLED.")
-                end
+                -- if EnableCharacterCreator:GetBool() then
+                --     CHARACTER_PERSISTENCE.OpenCreator( ply )
+                --     CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE NOT FOUND FOR " .. ply:Nick() .. ". OPENED CREATOR.")
+                -- else 
+                --     CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE NOT FOUND FOR " .. ply:Nick() .. ". CREATOR DISABLED.")
+                -- end
             end
             ply.CHARACTER_PERSISTENCE_CanSave = true
         end)
