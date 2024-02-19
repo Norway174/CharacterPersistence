@@ -2,8 +2,10 @@ CHARACTER_PERSISTENCE = CHARACTER_PERSISTENCE or {}
 CHARACTER_PERSISTENCE.Config = CHARACTER_PERSISTENCE.Config or {}
 
 local loadFolders = {
+    "character_persistence",
 }
 
+local ignoreFiles = {}
 
 function CHARACTER_PERSISTENCE.MsgC( ... )
     local args = {...}
@@ -67,7 +69,26 @@ function CHARACTER_PERSISTENCE.LoadAllFiles()
 end
 
 
+function CHARACTER_PERSISTENCE.LoadConfig()
+    
+    if CLIENT then
+        CHARACTER_PERSISTENCE.MsgC("Config file not loaded. (Client)")
+        return
+    end
+
+    local configFile = "char_persistence_config.lua"
+
+    if file.Exists(configFile, "LUA") then
+        include(configFile)
+        CHARACTER_PERSISTENCE.MsgC("Config file loaded.")
+    else
+        CHARACTER_PERSISTENCE.MsgC("Config file not found.")
+    end
+
+end
+
 
 CHARACTER_PERSISTENCE.MsgC("---- CHARACTER PERSISTENCE LOADING ----")
+CHARACTER_PERSISTENCE.LoadConfig()
 CHARACTER_PERSISTENCE.LoadAllFiles()
 CHARACTER_PERSISTENCE.MsgC("---- CHARACTER PERSISTENCE END ----")
