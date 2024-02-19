@@ -14,11 +14,11 @@ function CHARACTER_PERSISTENCE.MsgC( ... )
 
     if SERVER then
         table.insert(message_table, Color(52, 160, 211))
-        table.insert(message_table, "[CHARACTER_PERSISTENCE-SV] ")
+        table.insert(message_table, "[SV:CHAR_PERS] ")
     end
     if CLIENT then
         table.insert(message_table, Color(52, 211, 78))
-        table.insert(message_table, "[CHARACTER_PERSISTENCE-CL] ")
+        table.insert(message_table, "[CL:CHAR_PERS] ")
     end
 
     table.insert(message_table, Color(255, 255, 255))
