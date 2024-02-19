@@ -9,7 +9,6 @@ CHARACTER_PERSISTENCE:RegisterModule( ModuleName, 50,
 function( ply, DataToSave )
     // Save the player's Data
     // Make sure you return 'data' to save it.
-    if not DarkRP then return end
 
     // Default Stats
     DataToSave["nick"] = ply:Nick()
@@ -33,8 +32,6 @@ function( ply, DataToSave )
 end,
 function( ply, DataToLoad, GlobalData )
     // Load the player's Data
-
-    if not DarkRP then return end
     
     // Default Stats
     if DataToLoad["nick"] then ply:setRPName( DataToLoad["nick"] ) end
