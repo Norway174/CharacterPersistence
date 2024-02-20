@@ -33,15 +33,16 @@ function CHARACTER_PERSISTENCE.SaveCharacter( ply, fileName )
         
         CharTable[ModuleName] = CharTable[ModuleName] or {}
 
-        local succ, err = pcall(ModuleTable.Save, ply, CharTable[ModuleName] or {})
+        local succ, responseData = pcall(ModuleTable.Save, ply, CharTable[ModuleName])
 
         if not succ then
-            print("Error saving character data: '" .. ModuleName .. "'\n" .. err)
+            print("Error saving character data:", ModuleName )
+            ErrorNoHaltWithStack( responseData )
             ply:SendLua( 'CHARACTER_PERSISTENCE.MsgC("Error saving character. See server console for details.")' )
             return false
         end
 
-        CharTable[ModuleName] = err
+        CharTable[ModuleName] = responseData
 
     end
 
@@ -74,8 +75,9 @@ function CHARACTER_PERSISTENCE.LoadCharacter( ply, fileName )
         local succ, err = pcall(ModuleTable.Load, ply, CharTable[ModuleName] or {})
 
         if not succ then
-            print("Error saving character data: '" .. ModuleName .. "'\n" .. err)
-            ply:SendLua( 'CHARACTER_PERSISTENCE.MsgC("Error saving character. See server console for details.")' )
+            print("Error loading character data:", ModuleName )
+            ErrorNoHaltWithStack( err )
+            ply:SendLua( 'CHARACTER_PERSISTENCE.MsgC("Error loading character. See server console for details.")' )
             return false
         end
 
