@@ -26,14 +26,8 @@ function CHARACTER_PERSISTENCE.SaveCharacter( ply, fileName )
     local foldername = ply:SteamID64()
 
     local CharTable = {} --CHARACTER_PERSISTENCE.GetCharacter( ply, foldername, fileName )
-
     if CharTable == false then CharTable = {} end
 
-
-    --print("Save Modules", save_modules)
-
-    // Print Table
-    --PrintTable(save_modules)
 
     for ModuleName, ModuleTable in SortedPairsByMemberValue(CHARACTER_PERSISTENCE.Modules, "Order" ) do
         
@@ -52,9 +46,6 @@ function CHARACTER_PERSISTENCE.SaveCharacter( ply, fileName )
     end
 
 
-    --if true then return end
-
-    
     -- Create the folder if it doesn't exist
     if not file.IsDir(CHARACTER_PERSISTENCE.Config.Directory..foldername, "DATA") then
         file.CreateDir(CHARACTER_PERSISTENCE.Config.Directory..foldername)
@@ -62,9 +53,8 @@ function CHARACTER_PERSISTENCE.SaveCharacter( ply, fileName )
 
     -- Save the character data
     file.Write(CHARACTER_PERSISTENCE.Config.Directory .. foldername .. "/" .. fileName .. ".json", util.TableToJSON(CharTable, true))
-    --print("Saved character data to '" .. CHARACTER_PERSISTENCE.Config.Directory .. foldername .. "/" .. fileName .. ".json'")
-    --ply:PrintMessage( HUD_PRINTCONSOLE, "[HALOARMORY] Character saved to server." )
-    ply:SendLua( 'HALOARMORY.MsgC("Character saved to server.")' )
+
+
     return true
 
 end
@@ -78,11 +68,7 @@ function CHARACTER_PERSISTENCE.LoadCharacter( ply, fileName )
     if not istable(CharTable) then return false end
 
 
-    // Call a hook to allow other addons to load their own data from the character table
-    --hook.Call( "HALOARMORY.LoadCharacter", nil, ply, CharTable )
-
     for ModuleName, ModuleTable in SortedPairsByMemberValue(CHARACTER_PERSISTENCE.Modules, "Order" ) do
-        
         if not CharTable[ModuleName] then CharTable[ModuleName] = {} end
 
         local succ, err = pcall(ModuleTable.Load, ply, CharTable[ModuleName] or {})
@@ -95,12 +81,6 @@ function CHARACTER_PERSISTENCE.LoadCharacter( ply, fileName )
 
     end
 
-    --print("Loaded character data from '" .. CHARACTER_PERSISTENCE.Config.Directory .. foldername .. "/" .. fileName .. ".json'")
-    --ply:PrintMessage( HUD_PRINTCONSOLE, "[HALOARMORY] Character loaded from the server." )
-
-
-    // Print Table
-    --PrintTable(CharTable)
 
     return true
 
@@ -160,7 +140,10 @@ local function SaveCharTimer()
     timer.Create( "SaveCharTimer", 60 * 2, 0, function( )
         for _, ply in pairs(player.GetAll()) do
             if ply.CHARACTER_PERSISTENCE_CanSave then
-                CHARACTER_PERSISTENCE.SaveCharacter( ply )
+                local saved = CHARACTER_PERSISTENCE.SaveCharacter( ply )
+                if saved then
+                    ply:SendLua( 'CHARACTER_PERSISTENCE.MsgC("Character saved to server.")' )
+                end
             end
         end
         CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE SAVED FOR " .. #player.GetAll() .. " PLAYERS.")
