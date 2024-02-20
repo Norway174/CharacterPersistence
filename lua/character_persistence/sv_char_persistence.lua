@@ -25,7 +25,7 @@ function CHARACTER_PERSISTENCE.SaveCharacter( ply, fileName )
     if not fileName then fileName = "default" end
     local foldername = ply:SteamID64()
 
-    local CharTable = {} --CHARACTER_PERSISTENCE.GetCharacter( ply, foldername, fileName )
+    local CharTable = CHARACTER_PERSISTENCE.GetCharacter( ply, foldername, fileName )
     if CharTable == false then CharTable = {} end
 
 
