@@ -1,5 +1,13 @@
-//if true then return end
-
+--[[
+   _____                 _ _               
+  / ____|               | | |              
+ | (___   __ _ _ __   __| | |__   _____  __
+  \___ \ / _` | '_ \ / _` | '_ \ / _ \ \/ /
+  ____) | (_| | | | | (_| | |_) | (_) >  < 
+ |_____/ \__,_|_| |_|\__,_|_.__/ \___/_/\_\
+                                           
+                                           
+]]
 local ModuleName = "Sandbox"
 
 CHARACTER_PERSISTENCE.MsgC(Color( 207, 146, 33), "-> "..ModuleName.." Module Loading.")

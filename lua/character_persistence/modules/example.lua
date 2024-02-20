@@ -1,5 +1,14 @@
-if true then return end // Custom check. (We don't want to load the example module)
-
+if true then return end // We don't want to load the example module. But otherwise, remove this line.
+--[[
+  ______                           _      
+ |  ____|                         | |     
+ | |__  __  ____ _ _ __ ___  _ __ | | ___ 
+ |  __| \ \/ / _` | '_ ` _ \| '_ \| |/ _ \
+ | |____ >  < (_| | | | | | | |_) | |  __/
+ |______/_/\_\__,_|_| |_| |_| .__/|_|\___|
+                            | |           
+                            |_|           
+]]
 local ModuleName = "MyModule"
 
 CHARACTER_PERSISTENCE.MsgC(Color( 207, 146, 33), "-> "..ModuleName.." Module Loading.")
