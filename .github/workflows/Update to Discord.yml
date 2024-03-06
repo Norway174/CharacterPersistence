@@ -1,4 +1,4 @@
-name: Upload Haloarmory to Discord
+name: Upload Character-Persistence to Discord
 
 # Controls when the workflow will run
 on:
@@ -20,7 +20,7 @@ jobs:
           cd ../
           cp -vr HaloArmory-CharPersistence character-persistence-v${{ github.run_number }}
           rm -rf "HaloArmory-CharPersistence/Character-Persistence_V${{ github.run_number }}.zip"
-          zip -r "HaloArmory-CharPersistence/Character-Persistence_V${{ github.run_number }}.zip" ./character-persistence-v${{ github.run_number }} -x "haloarmory-v${{ github.run_number }}/.git/*" "haloarmory-v${{ github.run_number }}/.github/*" "haloarmory-v${{ github.run_number }}/README.md"
+          zip -r "HaloArmory-CharPersistence/Character-Persistence_V${{ github.run_number }}.zip" ./character-persistence-v${{ github.run_number }} -x "character-persistence-v${{ github.run_number }}/.git/*" "character-persistence-v${{ github.run_number }}/.github/*" "character-persistence-v${{ github.run_number }}/README.md"
       - name: Create Changelog
         id: changelog
         uses: actions/github-script@v6.3.1
@@ -40,7 +40,7 @@ jobs:
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
           content: |
-            ## **HALOARMORY** has been updated to version ${{ github.run_number }}!
+            ## **Character-Persistence** has been updated to version ${{ github.run_number }}!
             Changelog:
             ${{ steps.changelog.outputs.result }}
             Download:
