@@ -13,20 +13,14 @@ jobs:
     name: Zip and Push
     runs-on: ubuntu-latest
     steps:
-      #- name: Logging
-        #run: |
-        # echo "${{toJSON(github.event)}}"
-        # echo "Last commit message: ${{ github.event.commits[0].message }}"
-        #run: |
-        #  echo "${{ toJSON( github ) }}"
       - name: Checkout Repository
         uses: actions/checkout@master
       - name: Zip Folder
         run: |
           cd ../
-          cp -vr HaloArmory-InDev haloarmory-v${{ github.run_number }}
-          rm -rf "HaloArmory-InDev/Haloarmory_V${{ github.run_number }}.zip"
-          zip -r "HaloArmory-InDev/Haloarmory_V${{ github.run_number }}.zip" ./haloarmory-v${{ github.run_number }} -x "haloarmory-v${{ github.run_number }}/.git/*" "haloarmory-v${{ github.run_number }}/.github/*" "haloarmory-v${{ github.run_number }}/README.md"
+          cp -vr HaloArmory-CharPersistence character-persistence-v${{ github.run_number }}
+          rm -rf "HaloArmory-CharPersistence/Character-Persistence_V${{ github.run_number }}.zip"
+          zip -r "HaloArmory-CharPersistence/Character-Persistence_V${{ github.run_number }}.zip" ./character-persistence-v${{ github.run_number }} -x "haloarmory-v${{ github.run_number }}/.git/*" "haloarmory-v${{ github.run_number }}/.github/*" "haloarmory-v${{ github.run_number }}/README.md"
       - name: Create Changelog
         id: changelog
         uses: actions/github-script@v6.3.1
@@ -50,4 +44,4 @@ jobs:
             Changelog:
             ${{ steps.changelog.outputs.result }}
             Download:
-          filename: "./Haloarmory_V${{ github.run_number }}.zip"
+          filename: "./Character-Persistence_V${{ github.run_number }}.zip"
