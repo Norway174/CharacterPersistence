@@ -1,0 +1,53 @@
+name: Upload Haloarmory to Discord
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: 
+
+jobs:
+  zip-n-push:
+    name: Zip and Push
+    runs-on: ubuntu-latest
+    steps:
+      #- name: Logging
+        #run: |
+        # echo "${{toJSON(github.event)}}"
+        # echo "Last commit message: ${{ github.event.commits[0].message }}"
+        #run: |
+        #  echo "${{ toJSON( github ) }}"
+      - name: Checkout Repository
+        uses: actions/checkout@master
+      - name: Zip Folder
+        run: |
+          cd ../
+          cp -vr HaloArmory-InDev haloarmory-v${{ github.run_number }}
+          rm -rf "HaloArmory-InDev/Haloarmory_V${{ github.run_number }}.zip"
+          zip -r "HaloArmory-InDev/Haloarmory_V${{ github.run_number }}.zip" ./haloarmory-v${{ github.run_number }} -x "haloarmory-v${{ github.run_number }}/.git/*" "haloarmory-v${{ github.run_number }}/.github/*" "haloarmory-v${{ github.run_number }}/README.md"
+      - name: Create Changelog
+        id: changelog
+        uses: actions/github-script@v6.3.1
+        env:
+          COMMITS: ${{ toJSON(github.event.commits) }}
+        with:
+          result-encoding: string
+          script: |
+              const commits = JSON.parse(process.env.COMMITS);
+              var lines = "";
+              for (const commit of commits) {
+                lines += "```" + commit.message + "```"
+              }
+              return lines
+      - name: Send Discord Update
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          content: |
+            ## **HALOARMORY** has been updated to version ${{ github.run_number }}!
+            Changelog:
+            ${{ steps.changelog.outputs.result }}
+            Download:
+          filename: "./Haloarmory_V${{ github.run_number }}.zip"
