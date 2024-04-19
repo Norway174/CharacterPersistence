@@ -71,14 +71,15 @@ end
 
 function CHARACTER_PERSISTENCE.LoadConfig()
     
-    if CLIENT then
-        CHARACTER_PERSISTENCE.MsgC("Config file not loaded. (Client)")
-        return
-    end
+    -- if CLIENT then
+    --     CHARACTER_PERSISTENCE.MsgC("Config file not loaded. (Client)")
+    --     return
+    -- end
 
-    local configFile = "char_persistence_config.lua"
+    local configFile = "charpersistence_config.lua"
 
     if file.Exists(configFile, "LUA") then
+        AddCSLuaFile(configFile)
         include(configFile)
         CHARACTER_PERSISTENCE.MsgC("Config file loaded.")
     else
