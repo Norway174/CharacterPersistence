@@ -38,12 +38,12 @@ function CHARACTER_PERSISTENCE.LoadAllFile(fileDir)
             
             local fileRealm = string.sub(subFilePath, 1, 2)
 
-            if SERVER and (fileRealm != "sv" or fileRealm == "sh") then
+            if SERVER and (fileRealm == "cl" or fileRealm == "sh") then
                 CHARACTER_PERSISTENCE.MsgC("Adding CSLuaFile File " .. fileDir .. subFilePath)
                 AddCSLuaFile(fileDir .. subFilePath)
             end
 
-            if CLIENT and (fileRealm != "sv" or fileRealm == "sh") then
+            if CLIENT and (fileRealm == "cl" or fileRealm == "sh") then
                 CHARACTER_PERSISTENCE.MsgC("Including File " .. fileDir .. subFilePath)
                 include(fileDir .. subFilePath)
             elseif SERVER and (fileRealm == "sv" or fileRealm == "sh") then
