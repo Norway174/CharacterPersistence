@@ -117,4 +117,27 @@ function( ply, DataToLoad, GlobalData )
         if DataToLoad["speed"]["crouch_walk_speed"] then ply:SetCrouchedWalkSpeed( DataToLoad["speed"]["crouch_walk_speed"] ) end
         if DataToLoad["speed"]["ladder_climb_speed"] then ply:SetLadderClimbSpeed( DataToLoad["speed"]["ladder_climb_speed"] ) end
     end
-end )
+end,
+function( ply, CharData )
+    // New Character
+    // This function is called when a new character is created.
+    // This is useful for setting default values for a new character.
+
+    // Model
+    if CharData["model"] then ply:SetModel( CharData["model"] ) end
+    if CharData["skin"] then ply:SetSkin( CharData["skin"] ) end
+
+    if CharData["bodygroups"] then
+        for k, v in pairs(CharData["bodygroups"]) do
+            local BodygroupID = k
+            if not isnumber(k) then
+                BodygroupID = ply:FindBodygroupByName(k)
+            end
+            ply:SetBodygroup( BodygroupID, v )
+        end
+    end
+
+    ply:SetupHands()
+
+end
+)

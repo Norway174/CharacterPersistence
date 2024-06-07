@@ -26,4 +26,11 @@ function( ply, DataToLoad, GlobalData )
     // Load the player's Data
     // The data is returned the same way it was saved.
 
-end )
+end,
+function( ply, CharData )
+    // New Character
+    // This function is called when a new character is created.
+    // This is useful for setting default values for a new character.
+
+end
+)

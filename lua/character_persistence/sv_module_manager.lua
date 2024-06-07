@@ -6,7 +6,7 @@ CHARACTER_PERSISTENCE.Modules = CHARACTER_PERSISTENCE.Modules or {}
 
 
 
-function CHARACTER_PERSISTENCE:RegisterModule( name, order, SaveFnc, LoadFnc )
+function CHARACTER_PERSISTENCE:RegisterModule( name, order, SaveFnc, LoadFnc, NewCharFnc )
 
     if !name then
         HALOARMORY.MsgC("ERROR: No module name specified.")
@@ -27,10 +27,15 @@ function CHARACTER_PERSISTENCE:RegisterModule( name, order, SaveFnc, LoadFnc )
         return
     end
 
+    if !NewCharFnc or !isfunction(NewCharFnc) then
+        NewCharFnc = function() end
+    end
+
 
     CHARACTER_PERSISTENCE.Modules[name] = {
         Save = SaveFnc,
         Load = LoadFnc,
+        NewChar = NewCharFnc,
         Order = order
     }
 

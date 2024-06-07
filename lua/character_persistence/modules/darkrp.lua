@@ -83,4 +83,22 @@ function( ply, DataToLoad, GlobalData )
         if isfunction(shield_func) then shield_func(ply) end
     end
 
+end,
+function( ply, CharData )
+    // Create a new character for the player
+    // This function is called when a new character is created.
+    // This is useful for setting default values for a new character.
+
+    if not DarkRP then return end
+
+    // Default Stats
+    if CharData["nick"] then ply:setRPName( CharData["nick"] ) end
+    ply:setDarkRPVar("money", GAMEMODE.DarkRP.Config.startingmoney or 0)
+
+    if CharData["job"] then ply:changeTeam( CharData["job"] ) end
+
+    // Extra DarkRP Stats
+    ply:setDarkRPVar("wanted", false)
+    ply:setDarkRPVar("wantedReason", "")
+
 end )
