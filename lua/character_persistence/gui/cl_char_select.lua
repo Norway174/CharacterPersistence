@@ -717,6 +717,9 @@ function CHARACTER_PERSISTENCE.OpenSelector()
     end
 
 
+    RunConsoleCommand("char_persistence_save")
+
+
     WindowFrame = vgui.Create("DFrame")
     WindowFrame:SetSize(ScrW() * .7, ScrH() * .7)
     WindowFrame:Center()
