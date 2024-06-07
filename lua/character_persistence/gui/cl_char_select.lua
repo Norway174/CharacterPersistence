@@ -252,6 +252,8 @@ local function MakeCharacterDetails(ParentFrame, CharTable, CharSlot)
             local t = (camDistance - ZoomTransitionMin) / (ZoomTransitionMax - ZoomTransitionMin)
             selectedCenter = LerpVector(t, headPos, center)
         end
+
+        selectedCenter = selectedCenter + Vector(0, 0, 2.5)
         
         local x = camDistance * math.cos(radiansPitch) * math.cos(radiansYaw)
         local y = camDistance * math.cos(radiansPitch) * math.sin(radiansYaw)
