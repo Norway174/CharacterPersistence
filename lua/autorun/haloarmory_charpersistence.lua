@@ -3,6 +3,7 @@ CHARACTER_PERSISTENCE.Config = CHARACTER_PERSISTENCE.Config or {}
 
 local loadFolders = {
     "character_persistence",
+    "character_persistence/gui",
 }
 
 local ignoreFiles = {}

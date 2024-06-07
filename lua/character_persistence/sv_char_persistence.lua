@@ -18,19 +18,20 @@ hook.Add("SetupMove", "CHARACTER_PERSISTENCE.SVLOAD", function(ply, _, cmd)
 
         // Check if the player has a character saved
         timer.Simple(0.4, function()
-            if CHARACTER_PERSISTENCE.LoadCharacter( ply ) then
-                CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE LOADED FOR " .. ply:Nick() .. ".")
-                ply:SendLua( 'CHARACTER_PERSISTENCE.MsgC("Character loaded from the server.")' )
+            local auto_Load = ply:GetInfo( "char_persistence_autoload" )
+            if auto_Load ~= "" then
+                // Check if auto_Load is a valid slot name
+                if CHARACTER_PERSISTENCE.Config.CharacterSlots[auto_Load] then
+                    CHARACTER_PERSISTENCE.LoadCharacter( ply, auto_Load )
+                    CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE LOADED FOR " .. ply:Nick() .. ".")
+                    ply:SendLua( 'CHARACTER_PERSISTENCE.MsgC("Character loaded from the server.")' )
+                else
+                    CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE NOT FOUND FOR " .. ply:Nick() .. ". INVALID SLOT NAME.")
+                    ply:ConCommand("char_persistence_open")
+                end
             else
-                // If not, open the character creator
-                -- if EnableCharacterCreator:GetBool() then
-                --     CHARACTER_PERSISTENCE.OpenCreator( ply )
-                --     CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE NOT FOUND FOR " .. ply:Nick() .. ". OPENED CREATOR.")
-                -- else 
-                --     CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE NOT FOUND FOR " .. ply:Nick() .. ". CREATOR DISABLED.")
-                -- end
+                ply:ConCommand("char_persistence_open")
             end
-            ply.CHARACTER_PERSISTENCE_CanSave = true
         end)
 
     end
@@ -39,15 +40,28 @@ end)
 
 // SAVING
 local function SaveAllCharacters()
+    local SavedForNum = 0
+    local FailedSave = {}
+
     for _, ply in pairs(player.GetAll()) do
-        if ply.CHARACTER_PERSISTENCE_CanSave then
-            local saved = CHARACTER_PERSISTENCE.SaveCharacter( ply )
-            if saved then
-                ply:SendLua( 'CHARACTER_PERSISTENCE.MsgC("Character saved to server.")' )
-            end
+        local fileName = ply:GetNWString("char_persistence", "")
+        if fileName == "" then
+            table.insert(FailedSave, ply:Nick())
+            continue
         end
+
+        local saved = CHARACTER_PERSISTENCE.SaveCharacter( ply )
+        if saved then
+            ply:SendLua( 'CHARACTER_PERSISTENCE.MsgC("Character saved to server.")' )
+            SavedForNum = SavedForNum + 1
+        end
+        
     end
-    CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE SAVED FOR " .. #player.GetAll() .. " PLAYER(S).")
+
+    CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE SAVED FOR " .. SavedForNum .. " PLAYER(S).")
+    if #FailedSave > 0 then
+        CHARACTER_PERSISTENCE.MsgC("CHARACTHER PERSISTENCE NOT FOUND FOR " .. table.concat(FailedSave, ", ") .. ".")
+    end
 end
 
 
