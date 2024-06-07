@@ -76,14 +76,21 @@ function CHARACTER_PERSISTENCE.LoadConfig()
     --     return
     -- end
 
+    CHARACTER_PERSISTENCE.Config.SelectableJobs = {}
+
     local configFile = "charpersistence_config.lua"
+    local defaultConfigFile = "charpersistence_config.README.lua"
 
     if file.Exists(configFile, "LUA") then
         AddCSLuaFile(configFile)
         include(configFile)
         CHARACTER_PERSISTENCE.MsgC("Config file loaded.")
+    elseif file.Exists(defaultConfigFile, "LUA") then
+        CHARACTER_PERSISTENCE.MsgC("Config file not found. Using default config.")
+        AddCSLuaFile(defaultConfigFile)
+        include(defaultConfigFile)
     else
-        CHARACTER_PERSISTENCE.MsgC("Config file not found.")
+        CHARACTER_PERSISTENCE.MsgC("Config file not found. Something is wrong?")
     end
 
 end
