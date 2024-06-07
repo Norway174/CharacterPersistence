@@ -276,6 +276,7 @@ end)
 concommand.Add("char_persistence_save", function(ply, cmd, args)
 
     args = table.concat(args, " ")
+    if args == "" then args = nil end
 
     local fileName = args or ply:GetNWString("char_persistence", "")
     if fileName == "" then
