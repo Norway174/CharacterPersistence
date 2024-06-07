@@ -19,24 +19,6 @@
 // Or you can put it directly in the lua folder in GarrysMod. "garrysmod/lua/charpersistence_config.lua". However, this is not recommended.
 //
 
-//
-// The base directory for the character persistence files
-// This is located in the data directory
-//
-CHARACTER_PERSISTENCE.Config.BaseDir = "char_persistence"
-
-//
-// The directory for the character files
-// This is located in the base directory
-//
-CHARACTER_PERSISTENCE.Config.CharactersDir = "characters"
-
-//
-// The directory for the cache files
-// This is located in the base directory
-//
-CHARACTER_PERSISTENCE.Config.CacheDir = "cache"
-
 
 //
 // Here you can define the various character slots available to the players
@@ -135,3 +117,26 @@ CHARACTER_PERSISTENCE.Config.GUI_Theme = {
     TitleColor = Color(255, 255, 255),
     DefaultZoom = 25, // 100 for full body view, 35 for shoulder view, 25 for head view. Min: 15, Max: 1000
 }
+
+
+//
+///////////////////////////////////////////////////////////////////////////////
+// DO NOT CHANGE ANYTHING BELOW THIS LINE UNLESS YOU KNOW WHAT YOU'RE DOING. //
+///////////////////////////////////////////////////////////////////////////////
+//
+// The base directory for the character persistence files
+// This is located in the data directory
+//
+CHARACTER_PERSISTENCE.Config.BaseDir = "char_persistence"
+//
+// The directory for the character files
+// This is located in the base directory
+//
+CHARACTER_PERSISTENCE.Config.CharactersDir = "characters"
+//
+// The directory for the cache files
+// This is located in the base directory
+//
+CHARACTER_PERSISTENCE.Config.CacheDir = "cache"
+//
+///////////////////////////////////////////////////////////////////////////////
