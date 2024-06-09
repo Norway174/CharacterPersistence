@@ -7,7 +7,11 @@ CHARACTER_PERSISTENCE.Config = CHARACTER_PERSISTENCE.Config or {}
 CHARACTER_PERSISTENCE.WindowFrame = CHARACTER_PERSISTENCE.WindowFrame or {}
 CHARACTER_PERSISTENCE.WindowFrameBackground = CHARACTER_PERSISTENCE.WindowFrameBackground or {}
 
-local char_persistence_autoload = CreateClientConVar("char_persistence_autoload", "", true, true)
+local serverIP = game.GetIPAddress()
+local char_persistence_autoload = CreateClientConVar("char_persistence_autoload_" .. serverIP, "", true, true)
+local char_persistence_autoload_server = CreateClientConVar("char_persistence_autoload", char_persistence_autoload:GetString(), false, true)
+
+char_persistence_autoload_server:Revert()
 
 local selected_char = nil
 
@@ -621,6 +625,7 @@ local function MakeCharacterDetails(ParentFrame, CharTable, CharSlot)
 
                 if char_persistence_autoload:GetString() == CharSlot  then
                     char_persistence_autoload:SetString("")
+                    char_persistence_autoload_server:SetString("")
                     CHARACTER_PERSISTENCE.MsgC("Auto-Load set to none.")
                 end
 
@@ -661,9 +666,11 @@ local function MakeCharacterDetails(ParentFrame, CharTable, CharSlot)
         // Create a ClientConVar to store the AutoLoad slot name, to indicate which slot to AutoLoad.
         if char_persistence_autoload:GetString() == CharSlot  then
             char_persistence_autoload:SetString("")
+            char_persistence_autoload_server:SetString("")
             CHARACTER_PERSISTENCE.MsgC("Auto-Load set to none.")
         else
             char_persistence_autoload:SetString( CharSlot )
+            char_persistence_autoload_server:SetString( CharSlot )
             CHARACTER_PERSISTENCE.MsgC("Auto-Load set to ", Color(98,194,223), CharSlot, Color(255,255,255), ".")
         end
 
