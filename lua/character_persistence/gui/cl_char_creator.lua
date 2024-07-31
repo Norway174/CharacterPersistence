@@ -7,7 +7,7 @@ CHARACTER_PERSISTENCE.NewCharWindowFrame = CHARACTER_PERSISTENCE.NewCharWindowFr
 CHARACTER_PERSISTENCE.ModelSelectorWindowFrame = CHARACTER_PERSISTENCE.ModelSelectorWindowFrame or {}
 
 
-local GUI_Theme = CHARACTER_PERSISTENCE.Config.GUI_Theme or {
+local GUI_Theme = {
 	BackgroundBlur = true,
 	BackgroundColor = Color(0, 0, 0, 255 * .95),
 	ButtonCorners = Color(255, 255, 255),
@@ -17,7 +17,22 @@ local GUI_Theme = CHARACTER_PERSISTENCE.Config.GUI_Theme or {
 	DefaultZoom = 25, // 100 for full body view, 35 for shoulder view, 25 for head view. Min: 15, Max: 1000
 }
 
-GUI_Theme.BackgroundColor = Color(0, 0, 0, 255 * .8)
+//GUI_Theme.BackgroundColor = Color(0, 0, 0, 255 * .8)
+
+
+-- Initialize the camera distance and angles
+local camDistance = CHARACTER_PERSISTENCE.Config.GUI_Theme.DefaultZoom or GUI_Theme.DefaultZoom or 100
+local pitch = 0
+local yaw = 0
+local centerOffsetZ = 0
+
+-- Reset the view to the initial state
+local function CharacterModel_ResetView()
+    camDistance = CHARACTER_PERSISTENCE.Config.GUI_Theme.DefaultZoom or GUI_Theme.DefaultZoom or 100
+    pitch = 0
+    yaw = 0
+    centerOffsetZ = 0
+end
 
 
 local function VerifyName(name)
@@ -55,6 +70,12 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
 
     if IsValid( CHARACTER_PERSISTENCE.ModelSelectorWindowFrame ) then
         CHARACTER_PERSISTENCE.ModelSelectorWindowFrame:Remove()
+    end
+
+    // Check if CHARACTER_PERSISTENCE.Config.GUI_Theme is a table
+    // If it is, merge the tables.
+    if istable(CHARACTER_PERSISTENCE.Config.GUI_Theme) then
+        table.Merge(GUI_Theme, CHARACTER_PERSISTENCE.Config.GUI_Theme, true)
     end
 
     CHARACTER_PERSISTENCE.CharacterSlot = CharSlot
@@ -198,60 +219,94 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
 
     CharacterModel:SetLookAt(center)
 
-    -- Initialize the camera distance and angles
-    local camDistance = 120
-    local pitch = 0
-    local yaw = 0
+    -- Track the last right-click time for double-click detection
+    local lastRightClickTime = 0
+    local doubleClickThreshold = 0.2 -- seconds
 
     -- Hold to rotate
     function CharacterModel:DragMousePress()
-        self.PressX, self.PressY = input.GetCursorPos()
-        self.Pressed = true
+        -- Get left click
+        if input.IsMouseDown(MOUSE_LEFT) then
+            self.PressX, self.PressY = input.GetCursorPos()
+            self.LeftPressed = true
+        end
+        if input.IsMouseDown(MOUSE_RIGHT) then
+            self.PressX, self.PressY = input.GetCursorPos()
+            self.RightPressed = true
+
+            -- Check for double-click
+            local currentTime = CurTime()
+            if currentTime - lastRightClickTime < doubleClickThreshold then
+                -- Double-click detected, reset the view
+                CharacterModel_ResetView()
+            end
+            lastRightClickTime = currentTime
+        end
     end
 
     function CharacterModel:DragMouseRelease()
-        self.Pressed = false
+        self.LeftPressed = false
+        self.RightPressed = false
     end
 
     function CharacterModel:OnMouseWheeled(delta)
-        camDistance = math.Clamp(camDistance - delta * 5, 15, 1000)
-        --print(camDistance)
+        camDistance = math.Clamp(camDistance - delta * 5, 50, 1000)
     end
 
-    local ZoomTransitionMin, ZoomTransitionMax = 30, 120
+    local ZoomTransitionMin, ZoomTransitionMax = 30, 90
+
+    -- Calculate the allowable Z offset range based on model bounds
+    local minZOffset = mins.z - center.z
+    local maxZOffset = maxs.z - center.z
+
     function CharacterModel:LayoutEntity(ent)
         if (self.bAnimated) then self:RunAnimation() end
 
-        if (self.Pressed) then
+        if (self.LeftPressed) then
             local mx, my = input.GetCursorPos()
-
-            -- Update the pitch and yaw angles based on mouse movement
+            -- Update the yaw and pitch angles based on mouse movement
             yaw = yaw + ((self.PressX or mx) - mx) * 0.8 -- Invert left-right control and increase sensitivity
             pitch = math.Clamp(pitch - ((self.PressY or my) - my) * 0.8, -89, 89) -- Normal up-down control and increase sensitivity
-
             self.PressX, self.PressY = mx, my
         end
+
+        if (self.RightPressed) then
+            local mx, my = input.GetCursorPos()
+            -- Update the centerOffsetZ based on mouse movement up and down
+            centerOffsetZ = centerOffsetZ - ((self.PressY or my) - my) * 0.1 -- Adjust 0.1 to change sensitivity
+            self.PressX, self.PressY = mx, my
+        end
+
+        -- Limit the center offset
+        centerOffsetZ = math.Clamp(centerOffsetZ, minZOffset, maxZOffset)
 
         -- Calculate the camera position using spherical coordinates
         local radiansPitch = math.rad(pitch)
         local radiansYaw = math.rad(yaw)
 
         -- Determine the head position
-        local headPos = CharacterModel.Entity:GetBonePosition(CharacterModel.Entity:LookupBone("ValveBiped.Bip01_Head1"))
+        local headPos = CharacterModel.Entity:GetBonePosition(CharacterModel.Entity:LookupBone("ValveBiped.Bip01_Head1")) + Vector(0, 0, 10)
 
         -- Interpolate between the head position and the center based on camDistance
         local selectedCenter
-        if camDistance <= ZoomTransitionMin then
-            selectedCenter = headPos
-        elseif camDistance >= ZoomTransitionMax then
-            selectedCenter = center
+        if centerOffsetZ == 0 then
+                if camDistance <= ZoomTransitionMin then
+                selectedCenter = headPos
+            elseif camDistance >= ZoomTransitionMax then
+                selectedCenter = center
+            else
+                local t = (camDistance - ZoomTransitionMin) / (ZoomTransitionMax - ZoomTransitionMin)
+                selectedCenter = LerpVector(t, headPos, center)
+            end
         else
-            local t = (camDistance - ZoomTransitionMin) / (ZoomTransitionMax - ZoomTransitionMin)
-            selectedCenter = LerpVector(t, headPos, center)
+            selectedCenter = center
         end
 
-        selectedCenter = selectedCenter + Vector(0, 0, 3)
-        
+
+        -- Apply the offset to the selectedCenter
+        selectedCenter = selectedCenter + Vector(0, 0, centerOffsetZ)
+
+        -- Calculate the final camera position
         local x = camDistance * math.cos(radiansPitch) * math.cos(radiansYaw)
         local y = camDistance * math.cos(radiansPitch) * math.sin(radiansYaw)
         local z = camDistance * math.sin(radiansPitch)
@@ -261,7 +316,6 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
 
         CharacterModel.Entity:SetEyeTarget(selectedCenter + Vector(x, y, z))
     end
-
 
 
     // Display a character name box, let's start with a container. So we can also add a label.
