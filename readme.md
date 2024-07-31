@@ -6,6 +6,13 @@ It works straight out of the box, no config required. But every aspect can be cu
 
 And it also serves as a very simple framework for other developers to add in their own saving & loading modules for players.
 
+## Config
+Grab the standalone Config addon to configure Character Persistence to suit your needs!
+
+This is the reccommended method of configuring Character Persistence, so you don't have to re-do all your custom changes each update.
+
+You can download the Config from here: [CharacterPersistence-Config](https://github.com/Norway174/CharacterPersistence-Config)
+
 ## Requirements
 Tested and works with the following gamemodes:
 * [Sandbox](https://wiki.facepunch.com/gmod/gamemodes/Sandbox)
