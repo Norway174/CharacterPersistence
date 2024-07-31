@@ -6,6 +6,12 @@ It works straight out of the box, no config required. But every aspect can be cu
 
 And it also serves as a very simple framework for other developers to add in their own saving & loading modules for players.
 
+It was initially created for HaloRP, as a part of my HaloArmory addon. But it has since grown in both scope and flexibility since then. And grown into it's own standalone project.
+
+And it should be more then capeable of handling any other games you want to throw at it. Keep in mind, it's mainly designed around Sandbox and DarkRP styles of gamemodes.
+
+But with the right modules in place, I don't see why it shouldn't work for practically any gamemode you'd like to. Provided it doesn't already add it's own Character Persistence already, of course!
+
 ## Config
 Grab the standalone Config addon to configure Character Persistence to suit your needs!
 
@@ -13,15 +19,18 @@ This is the reccommended method of configuring Character Persistence, so you don
 
 You can download the Config from here: [CharacterPersistence-Config](https://github.com/Norway174/CharacterPersistence-Config)
 
-## Requirements
-Tested and works with the following gamemodes:
+## Modules
+Character Persitence uses a custom made module system. Which can be tailored for whatever needs you may have.
+
+Currently, two modules are included by default:
 * [Sandbox](https://wiki.facepunch.com/gmod/gamemodes/Sandbox)
 * [DarkRP](https://github.com/FPtje/DarkRP)
 
-It also comes included with support for:
+The DarkRP Module comes with additional support for these addons as well, but are not required:
 * [HaloArmory](https://steamcommunity.com/sharedfiles/filedetails/?id=3287212606)
 * [MRS - Advanced Rank System](https://www.gmodstore.com/market/view/rankup-advanced-rank-system)
 
+More modules might also get added from requests. But it's also real easy to add your own as well!
 
 ## For Developers
 If you want to add your own module, doing so is very easy!
