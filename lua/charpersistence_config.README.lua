@@ -16,7 +16,9 @@
 // This way, you can update the addon without losing your settings. And check this README file for updates.
 // 
 // It's also suggest you move the config file to either another addon you create yourself, like so: "myaddon/lua/charpersistence_config.lua"
-// Or you can put it directly in the lua folder in GarrysMod. "garrysmod/lua/charpersistence_config.lua". However, this is not recommended.
+// I have already created such a helper addon for you here: https://github.com/Norway174/CharacterPersistence-Config
+// Just download, put it into your Addons folder, and edit the Config included in that file as you wish.
+// If you are editing that file, then you can ignore this notice. But remember to check this README file for updates.
 //
 
 
@@ -55,16 +57,24 @@ CHARACTER_PERSISTENCE.Config.CharacterSlots["character2"] = {
     Order = 2,
 }
 
-CHARACTER_PERSISTENCE.Config.CharacterSlots["vip_character"] = {
-    PrintName = "VIP Character",
+CHARACTER_PERSISTENCE.Config.CharacterSlots["character3"] = {
+    PrintName = "Character 3",
     CanSee = true,
-    CanUse = function(ply)
-        // Add custom function here to check if the player is a VIP.
-        // Returning nothing is the same as returning false.
-    end,
-    CanUseDeniedText = "Requires a VIP rank",
+    CanUse = true,
+    CanUseDeniedText = "",
     Order = 3,
 }
+
+-- CHARACTER_PERSISTENCE.Config.CharacterSlots["vip_character"] = {
+--     PrintName = "VIP Character",
+--     CanSee = true,
+--     CanUse = function(ply)
+--         // Add custom function here to check if the player is a VIP.
+--         // Returning nothing is the same as returning false.
+--     end,
+--     CanUseDeniedText = "Requires a VIP rank",
+--     Order = 50,
+-- }
 
 CHARACTER_PERSISTENCE.Config.CharacterSlots["admin_character"] = {
     PrintName = "Admin Character",
