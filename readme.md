@@ -33,12 +33,12 @@ You can also just call the function directly, without the file. Check the wiki f
 * `Order` = This is the ordering number. Lower numbers go first.
 * `SaveFunction` = This is the function that gets called on save. You must return a table with your save data. This function is also given a table with the existing data if there is any. It's up to you how you wanna use that.
 * `LoadFunction` = This function is called when a character is being loaded. IE. Selected from the menu, or spawned in for the first time with Auto-Load. This function is given a table with the data. This is the same data you supplied it with the save function.
-* `NewCharFunction` = Optional helper function. This is only ever called when the player creates a new character. It's meant to reset everything to a blank default state. As if the player had spawned on the server for the very first time. This function is sent a table from the CharacterCreator with the players options, currently these are:
-* * `nick`
-* * `job`
-* * `model`
-* * `skin`
-* * `bodygroups`
+* `NewCharFunction` = Optional helper function. This is only ever called when the player creates a new character. It's meant to reset everything to a blank default state. As if the player had spawned on the server for the very first time. This function is sent a table from the CharacterCreator with the players options, currently these are:  
+ ● `nick`  
+ ● `job`  
+ ● `model`  
+ ● `skin`  
+ ● `bodygroups`
 
 
 ## Discord
