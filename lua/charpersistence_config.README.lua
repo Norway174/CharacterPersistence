@@ -116,9 +116,9 @@ CHARACTER_PERSISTENCE.Config.EnforceFirstAndLastName = true
 // Not everything uses these values yet. But it will be implemented in the future.
 //
 CHARACTER_PERSISTENCE.Config.GUI_Theme = {
-    BackgroundImage = {
+    BackgroundImage = { // If you add multiple options here, it will pick one at random.
         "https://msdesign.blob.core.windows.net/wallpapers/Microsoft_Nostalgic_Windows_Wallpaper_4k.jpg", // <- Will automatically download the image and cache it.
-        //"gui/noicon.png",
+        //"gui/noicon.png", // <- Can also use materials and textures.
     },
     BackgroundBlur = true,
     BackgroundColor = Color(0, 0, 0, 255 * .95),
