@@ -2,6 +2,7 @@ CHARACTER_PERSISTENCE.MsgC("Character Select GUI Loading.")
 
 CHARACTER_PERSISTENCE = CHARACTER_PERSISTENCE or {}
 CHARACTER_PERSISTENCE.Config = CHARACTER_PERSISTENCE.Config or {}
+CHARACTER_PERSISTENCE.Config.GUI_Theme = CHARACTER_PERSISTENCE.Config.GUI_Theme or {}
 
 
 CHARACTER_PERSISTENCE.WindowFrame = CHARACTER_PERSISTENCE.WindowFrame or {}
@@ -38,14 +39,14 @@ local GUI_Theme = {
 //GUI_Theme.BackgroundColor = Color(0, 0, 0, 255 * .8)
 
 -- Initialize the camera distance and angles
-local camDistance = CHARACTER_PERSISTENCE.Config.GUI_Theme.DefaultZoom or GUI_Theme.DefaultZoom or 100
+local camDistance = CHARACTER_PERSISTENCE.Config.GUI_Theme.DefaultZoom or GUI_Theme.DefaultZoom or 25
 local pitch = 0
 local yaw = 0
 local centerOffsetZ = 0
 
 -- Reset the view to the initial state
 local function CharacterModel_ResetView()
-    camDistance = CHARACTER_PERSISTENCE.Config.GUI_Theme.DefaultZoom or GUI_Theme.DefaultZoom or 100
+    camDistance = CHARACTER_PERSISTENCE.Config.GUI_Theme.DefaultZoom or GUI_Theme.DefaultZoom or 25
     pitch = 0
     yaw = 0
     centerOffsetZ = 0
@@ -218,7 +219,7 @@ local function MakeCharacterDetails(ParentFrame, CharTable, CharSlot)
 
     -- Calculate the center of the model
     local mins, maxs = CharacterModel.Entity:GetModelBounds()
-    local center = (mins + maxs) / 2
+    local center = (mins + maxs) / 2 - Vector(0, 0, -6)
 
     CharacterModel:SetLookAt(center)
 
@@ -253,7 +254,7 @@ local function MakeCharacterDetails(ParentFrame, CharTable, CharSlot)
     end
 
     function CharacterModel:OnMouseWheeled(delta)
-        camDistance = math.Clamp(camDistance - delta * 5, 50, 1000)
+        camDistance = math.Clamp(camDistance - delta * 5, 25, 1000)
     end
 
     local ZoomTransitionMin, ZoomTransitionMax = 30, 90

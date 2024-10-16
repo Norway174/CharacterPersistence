@@ -2,6 +2,7 @@ CHARACTER_PERSISTENCE.MsgC("Character Creator GUI Loading.")
 
 CHARACTER_PERSISTENCE = CHARACTER_PERSISTENCE or {}
 CHARACTER_PERSISTENCE.Config = CHARACTER_PERSISTENCE.Config or {}
+CHARACTER_PERSISTENCE.Config.GUI_Theme = CHARACTER_PERSISTENCE.Config.GUI_Theme or {}
 
 CHARACTER_PERSISTENCE.NewCharWindowFrame = CHARACTER_PERSISTENCE.NewCharWindowFrame or {}
 CHARACTER_PERSISTENCE.ModelSelectorWindowFrame = CHARACTER_PERSISTENCE.ModelSelectorWindowFrame or {}
@@ -21,14 +22,14 @@ local GUI_Theme = {
 
 
 -- Initialize the camera distance and angles
-local camDistance = CHARACTER_PERSISTENCE.Config.GUI_Theme.DefaultZoom or GUI_Theme.DefaultZoom or 100
+local camDistance = CHARACTER_PERSISTENCE.Config.GUI_Theme.DefaultZoom or GUI_Theme.DefaultZoom or 25
 local pitch = 0
 local yaw = 0
 local centerOffsetZ = 0
 
 -- Reset the view to the initial state
 local function CharacterModel_ResetView()
-    camDistance = CHARACTER_PERSISTENCE.Config.GUI_Theme.DefaultZoom or GUI_Theme.DefaultZoom or 100
+    camDistance = CHARACTER_PERSISTENCE.Config.GUI_Theme.DefaultZoom or GUI_Theme.DefaultZoom or 25
     pitch = 0
     yaw = 0
     centerOffsetZ = 0
@@ -215,7 +216,7 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
 
     -- Calculate the center of the model
     local mins, maxs = CharacterModel.Entity:GetModelBounds()
-    local center = (mins + maxs) / 2
+    local center = (mins + maxs) / 2 - Vector(0, 0, -6)
 
     CharacterModel:SetLookAt(center)
 
@@ -250,7 +251,7 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
     end
 
     function CharacterModel:OnMouseWheeled(delta)
-        camDistance = math.Clamp(camDistance - delta * 5, 50, 1000)
+        camDistance = math.Clamp(camDistance - delta * 5, 25, 1000)
     end
 
     local ZoomTransitionMin, ZoomTransitionMax = 30, 90
@@ -289,18 +290,19 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
         local radiansYaw = math.rad(yaw)
 
         -- Determine the head position
-        local headPos = CharacterModel.Entity:GetBonePosition(CharacterModel.Entity:LookupBone("ValveBiped.Bip01_Head1") or 0) + Vector(0, 0, 10)
+        local headPos = CharacterModel.Entity:GetBonePosition(CharacterModel.Entity:LookupBone("ValveBiped.Bip01_Head1") or 0) + Vector(0, 0, 2)
 
         if CharacterModel.Entity:GetModel() == "models/error.mdl" then
             headPos = center
         end
 
         -- Interpolate between the head position and the center based on camDistance
-        local selectedCenter
+        local selectedCenter = headPos
         if centerOffsetZ == 0 then
-                if camDistance <= ZoomTransitionMin then
+            if camDistance <= ZoomTransitionMin then
                 selectedCenter = headPos
             elseif camDistance >= ZoomTransitionMax then
+            --print(camDistance)
                 selectedCenter = center
             else
                 local t = (camDistance - ZoomTransitionMin) / (ZoomTransitionMax - ZoomTransitionMin)
