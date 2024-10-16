@@ -285,7 +285,7 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
         local radiansYaw = math.rad(yaw)
 
         -- Determine the head position
-        local headPos = CharacterModel.Entity:GetBonePosition(CharacterModel.Entity:LookupBone("ValveBiped.Bip01_Head1")) + Vector(0, 0, 10)
+        local headPos = CharacterModel.Entity:GetBonePosition(CharacterModel.Entity:LookupBone("ValveBiped.Bip01_Head1") or 0) + Vector(0, 0, 10)
 
         -- Interpolate between the head position and the center based on camDistance
         local selectedCenter
