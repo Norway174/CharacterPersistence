@@ -262,6 +262,10 @@ local function MakeCharacterDetails(ParentFrame, CharTable, CharSlot)
     local minZOffset = mins.z - center.z
     local maxZOffset = maxs.z - center.z
 
+    if CharacterModel.Entity:GetModel() == "models/error.mdl" then
+        camDistance = 200
+    end
+
     function CharacterModel:LayoutEntity(ent)
         if (self.bAnimated) then self:RunAnimation() end
 
@@ -289,6 +293,10 @@ local function MakeCharacterDetails(ParentFrame, CharTable, CharSlot)
 
         -- Determine the head position
         local headPos = CharacterModel.Entity:GetBonePosition(CharacterModel.Entity:LookupBone("ValveBiped.Bip01_Head1") or 0)
+
+        if CharacterModel.Entity:GetModel() == "models/error.mdl" then
+            headPos = center
+        end
 
         -- Interpolate between the head position and the center based on camDistance
         local selectedCenter
