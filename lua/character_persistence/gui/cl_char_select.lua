@@ -798,6 +798,24 @@ function CHARACTER_PERSISTENCE.OpenSelector()
         if IsValid(WindowFrameBackground) then
             WindowFrameBackground:Remove()
         end
+
+        local Backgrounds = GUI_Theme.BackgroundImage
+        if not istable(Backgrounds) then
+            Backgrounds = {Backgrounds}
+        end
+
+        // Check if the background table is empty, if it is abort.
+        if table.Count(Backgrounds) == 0 then
+            return // No background for us.
+        end
+
+        // Randomly select a background image
+        Backgrounds = Backgrounds[math.random(1, #Backgrounds)]
+
+        if not isstring(Backgrounds) then
+            Backgrounds = "gui/noicon.png"
+        end
+        
         // Create a panel that sits behind the window frame and covers the whole screen and displays the background image.
         local BackgroundPanel = vgui.Create("DFrame")
         BackgroundPanel:SetSize(ScrW(), ScrH())
@@ -808,18 +826,6 @@ function CHARACTER_PERSISTENCE.OpenSelector()
         BackgroundPanel:SetSizable( false )
         BackgroundPanel:SetScreenLock(true)
         BackgroundPanel:SetVisible(true)
-
-        local Backgrounds = GUI_Theme.BackgroundImage
-        if not istable(Backgrounds) then
-            Backgrounds = {Backgrounds}
-        end
-
-        // Randomly select a background image
-        Backgrounds = Backgrounds[math.random(1, #Backgrounds)]
-
-        if not isstring(Backgrounds) then
-            Backgrounds = "gui/noicon.png"
-        end
 
         BackgroundPanel.CustomMaterial = Material(Backgrounds, "smooth noclamp")
 
