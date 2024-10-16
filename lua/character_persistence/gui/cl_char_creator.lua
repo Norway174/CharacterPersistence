@@ -144,6 +144,7 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
 
     if DarkRP and CHARACTER_PERSISTENCE.Config.IncludeDefaultDarkRPJob then
         CHARACTER_PERSISTENCE.Config.SelectableJobs[GAMEMODE.DefaultTeam] = true
+        --table.insert(CHARACTER_PERSISTENCE.Config.SelectableJobs, 1, GAMEMODE.DefaultTeam or DarkRP.DefaultTeam)
     end
 
 
@@ -444,10 +445,15 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
     end
 
     for k, v in pairs(CHARACTER_PERSISTENCE.Config.SelectableJobs) do
+        if isstring(k) then
+            k = _G[k] or nil
+        end
         local JobDetails = RPExtraTeams[k]
+
+        print("Job:", k, v, JobDetails)
+
         if !JobDetails then continue end
 
-        --print("Job:", k)
         --PrintTable(JobDetails)
 
         local JobName = JobDetails.name or "Unknown Job"

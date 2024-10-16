@@ -97,12 +97,12 @@ CHARACTER_PERSISTENCE.Config.IncludeDefaultDarkRPJob = true
 
 //
 // Here you can define other jobs that the player can select.
-// Use this format: [TEAMNAME] = true,
+// Use this format: ["TEAMNAME"] = true,
 //
 CHARACTER_PERSISTENCE.Config.SelectableJobs = {
-    --[TEAM_POLICE] = true,
-    --[TEAM_CHIEF] = true,
-    --[TEAM_MAYOR] = true,
+    --["TEAM_POLICE"] = true,
+    --["TEAM_CHIEF"] = true,
+    --["TEAM_MAYOR"] = true,
 }
 
 //
