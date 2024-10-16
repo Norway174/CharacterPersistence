@@ -794,21 +794,16 @@ function CHARACTER_PERSISTENCE.OpenSelector()
 
     WindowFrame:MakePopup()
 
-    if GUI_Theme.BackgroundImage and GUI_Theme.BackgroundImage ~= "" then
-        if IsValid(WindowFrameBackground) then
-            WindowFrameBackground:Remove()
-        end
+    if IsValid(WindowFrameBackground) then
+        WindowFrameBackground:Remove()
+    end
 
-        local Backgrounds = GUI_Theme.BackgroundImage
-        if not istable(Backgrounds) then
-            Backgrounds = {Backgrounds}
-        end
+    local Backgrounds = GUI_Theme.BackgroundImage or ""
+    if not istable(Backgrounds) then
+        Backgrounds = {Backgrounds}
+    end
 
-        // Check if the background table is empty, if it is abort.
-        if table.Count(Backgrounds) == 0 then
-            return // No background for us.
-        end
-
+    if Backgrounds and #Backgrounds ~= 0 then
         // Randomly select a background image
         Backgrounds = Backgrounds[math.random(1, #Backgrounds)]
 
@@ -1171,3 +1166,4 @@ list.Set( "DesktopWindows", "CHARACTER SELECTOR", {
         CHARACTER_PERSISTENCE.OpenSelector()
     end,
 })
+
