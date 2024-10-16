@@ -7,7 +7,10 @@ CHARACTER_PERSISTENCE.Config = CHARACTER_PERSISTENCE.Config or {}
 CHARACTER_PERSISTENCE.WindowFrame = CHARACTER_PERSISTENCE.WindowFrame or {}
 CHARACTER_PERSISTENCE.WindowFrameBackground = CHARACTER_PERSISTENCE.WindowFrameBackground or {}
 
+
 local serverIP = game.GetIPAddress()
+serverIP = string.gsub(serverIP, ":", "_") // convert all colons to underscores
+
 local char_persistence_autoload = CreateClientConVar("char_persistence_autoload_" .. serverIP, "", true, true)
 local char_persistence_autoload_server = CreateClientConVar("char_persistence_autoload", char_persistence_autoload:GetString(), false, true)
 
