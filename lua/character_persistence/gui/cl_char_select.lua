@@ -370,8 +370,8 @@ local function MakeCharacterDetails(ParentFrame, CharTable, CharSlot)
 
     // Get the rank
     if MRS then
-        local group = MRS.GetNWdata(ply, "Group")
-        local rank = MRS.GetNWdata(ply, "Rank")
+        local group = MRS.GetNWdata(LocalPlayer(), "Group")
+        local rank = MRS.GetNWdata(LocalPlayer(), "Rank")
         
         if not MRS.Ranks[group] or not MRS.Ranks[group].ranks[rank] then
         // Do nothing.
@@ -1033,7 +1033,7 @@ function CHARACTER_PERSISTENCE.OpenSelector()
                 CanSee = v.CanSee
             elseif isfunction(v.CanSee) then
                 // Try catch the function
-                    local success, return_msg = pcall(v.CanSee, ply)
+                    local success, return_msg = pcall(v.CanSee, LocalPlayer())
                     if success then
                         CanSee = return_msg
                     end
@@ -1046,7 +1046,7 @@ function CHARACTER_PERSISTENCE.OpenSelector()
                 CanUse = v.CanUse
             elseif isfunction(v.CanUse) then
                 // Try catch the function
-                    local success, return_msg = pcall(v.CanUse, ply)
+                    local success, return_msg = pcall(v.CanUse, LocalPlayer())
                     if success then
                         CanUse = return_msg
                     end
