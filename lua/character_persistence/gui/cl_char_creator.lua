@@ -737,9 +737,11 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
             Player_model = self.JobModels
         end
 
-        if isstring(Player_model) then
-            Player_model = {Player_model}
+        if isstring(self.JobModels) then
+            self.JobModels = {Player_model}
         end
+
+        print("Job Models:", self.JobModels, Player_model)
 
         if CharacterModel:GetModel() ~= Player_model and not table.HasValue(self.JobModels, CharacterModel:GetModel()) then
 
@@ -882,7 +884,7 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
     CancelButton:SetText("")
     CancelButton:SetColor( GUI_Theme.TextColor )
 
-    CancelButton:SetPos(0, CreateCharacterButtonContainer:GetTall() - CancelButton:GetTall())
+    CancelButton:SetPos(35, CreateCharacterButtonContainer:GetTall() - CancelButton:GetTall())
 
     CancelButton.Paint = function(self, w, h)
         draw.RoundedBox( 0, 0, 0, w, h, Color(0,0,0) )
