@@ -450,7 +450,7 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
         end
         local JobDetails = RPExtraTeams[k]
 
-        print("Job:", k, v, JobDetails)
+        --print("Job:", k, v, JobDetails)
 
         if !JobDetails then continue end
 
@@ -741,7 +741,7 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
             self.JobModels = {Player_model}
         end
 
-        print("Job Models:", self.JobModels, Player_model)
+        --print("Job Models:", self.JobModels, Player_model)
 
         if CharacterModel:GetModel() ~= Player_model and not table.HasValue(self.JobModels, CharacterModel:GetModel()) then
 
