@@ -737,6 +737,10 @@ function CHARACTER_PERSISTENCE.NewCharacter( CharSlot )
             Player_model = self.JobModels
         end
 
+        if isstring(Player_model) then
+            Player_model = {Player_model}
+        end
+
         if CharacterModel:GetModel() ~= Player_model and not table.HasValue(self.JobModels, CharacterModel:GetModel()) then
 
             // Check if the players current model is in the job models list, if so, set it to that model.
