@@ -1,6 +1,10 @@
 CHARACTER_PERSISTENCE = CHARACTER_PERSISTENCE or {}
 CHARACTER_PERSISTENCE.Config = CHARACTER_PERSISTENCE.Config or {}
 
+if SERVER then
+    resource.AddWorkshop("3299351202")
+end
+
 local loadFolders = {
     "character_persistence",
     "character_persistence/gui",

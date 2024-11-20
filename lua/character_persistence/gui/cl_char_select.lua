@@ -108,9 +108,11 @@ local function MakeNewCharacter(ParentFrame, CharSlot)
         end
         CHARACTER_PERSISTENCE.GUI.DrawFrame(0, 0, w, h, 10, Color(0, 0, 0, 0), GUI_Theme.ButtonCorners)
 
-        surface.SetDrawColor( Color(233, 233, 233) )
-        surface.SetMaterial( CHARACTER_PERSISTENCE.Config.Materials["person_add"] )
-        surface.DrawTexturedRect((w * .5) - (icon_Size * .5) - 165 + 20, (h * .5) - (icon_Size * .5), icon_Size, icon_Size)
+        if CHARACTER_PERSISTENCE.Config.Materials["person_add"] ~= nil then
+            surface.SetDrawColor( Color(233, 233, 233) )
+            surface.SetMaterial( CHARACTER_PERSISTENCE.Config.Materials["person_add"] )
+            surface.DrawTexturedRect((w * .5) - (icon_Size * .5) - 165 + 20, (h * .5) - (icon_Size * .5), icon_Size, icon_Size)
+        end
 
         draw.SimpleText("CREATE NEW", "CharCreatorLarge", w * .5 + 20, h * .5, GUI_Theme.TextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
@@ -519,10 +521,12 @@ local function MakeCharacterDetails(ParentFrame, CharTable, CharSlot)
 
         // Draw an icon
         //surface.SetDrawColor(GUI_Theme.TextColor)
-        surface.SetDrawColor( Color(233, 233, 233) )
-        surface.SetMaterial( CHARACTER_PERSISTENCE.Config.Materials["delete"] )
-        surface.DrawTexturedRect(w * .5 - 10, w * .5 - 10, 20, 20)
-
+        if CHARACTER_PERSISTENCE.Config.Materials["delete"] ~= nil then
+            surface.SetDrawColor( Color(233, 233, 233) )
+            surface.SetMaterial( CHARACTER_PERSISTENCE.Config.Materials["delete"] )
+            surface.DrawTexturedRect(w * .5 - 10, w * .5 - 10, 20, 20)
+        end
+        
     end
 
     DeleteButton.DoClick = function(self, _button)
@@ -748,20 +752,27 @@ local function MakeCharacterDetails(ParentFrame, CharTable, CharSlot)
         CHARACTER_PERSISTENCE.GUI.DrawFrame(0, 0, w, h, 10, Color(0, 0, 0, 0), GUI_Theme.ButtonCorners)
 
 
-        -- local AutoLoad_text = "[ ]"
-        -- if char_persistence_autoload:GetString() == CharSlot then
-        --     AutoLoad_text = "[x]"
-        -- end
 
-        surface.SetMaterial( CHARACTER_PERSISTENCE.Config.Materials["check_box_outline"] )
-        if char_persistence_autoload:GetString() == CharSlot then
-            surface.SetMaterial( CHARACTER_PERSISTENCE.Config.Materials["check_box"] )
+        local AutoLoad_text = "Toggle Auto-Load"
+
+        if CHARACTER_PERSISTENCE.Config.Materials["check_box_outline"] ~= nil then
+            surface.SetMaterial( CHARACTER_PERSISTENCE.Config.Materials["check_box_outline"] )
+            if char_persistence_autoload:GetString() == CharSlot then
+                surface.SetMaterial( CHARACTER_PERSISTENCE.Config.Materials["check_box"] )
+            end
+
+            surface.SetDrawColor( Color(233, 233, 233) )
+            surface.DrawTexturedRect(w * .5 - 10 - 80, h * .5 - 10, 20, 20)
+        else
+            if char_persistence_autoload:GetString() == CharSlot then
+                AutoLoad_text = "[x] Toggle Auto-Load"
+            else
+                AutoLoad_text = "[ ] Toggle Auto-Load"
+            end
+
         end
 
-        surface.SetDrawColor( Color(233, 233, 233) )
-        surface.DrawTexturedRect(w * .5 - 10 - 80, h * .5 - 10, 20, 20)
-
-        draw.SimpleText("Toggle Auto-Load", "CharCreatorMedium", w * .5, h * .5, GUI_Theme.TextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText(AutoLoad_text, "CharCreatorMedium", w * .5, h * .5, GUI_Theme.TextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
 
     
